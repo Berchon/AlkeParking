@@ -28,18 +28,8 @@ Os veículos podem (opcionalmente) ter um cartão de desconto, o que reduz em 15
 * A pedido da administração do AlkeParking, deve ser mantido um registro do total de veículos retirados do estacionamento, com o total dos ganhos recebidos.
 * A administração poderá solicitar a qualquer momento a relação das placas dos veículos que estiverem no estacionamento.
 
-## Decisões tomada pela equipe
-
-1. Utilizar a tabela ascii para fazer a criptografia
-2. Possibilitar encriptar e descriptar o texto
-3. Possibilitar a criptografia não só de letras, mas sim de qualquer caracter ascii, pois assim poderá ser encriptado números, pontuações, acentução gráfica, etc.
-
-## O que faltou fazer
-
-Por causa do curto tempo disponível, não tivemos tempo de implementar os casos que os códigos ascii resultantes da soma/subtração fique fora do intervalo entre 0 e 255.
-
 ## Equipe
 
-| ![Amanda](https://avatars.githubusercontent.com/u/62217873?v=4) |![Luciano](https://avatars.githubusercontent.com/u/63373302?v=4)|
+| ![Amanda](https://avatars.githubusercontent.com/u/81179653?v=4) |![Luciano](https://avatars.githubusercontent.com/u/63373302?v=4)|
 |--|--|
 | Amanda | Luciano |

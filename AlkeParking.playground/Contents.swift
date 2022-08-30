@@ -41,8 +41,8 @@ extension Vehicle: Hashable {
 
 struct Parking {
     var vehicles: Set<Vehicle> = []
-//    let historic: [Vehicle] = []
-    let capacity = 4
+    let capacity = 20
+    var info = (numberOfVehiclesCheckout: 0, earnings: 0)
     
     mutating func checkInVehicle(_ vehicle: Vehicle, onFinish: (Bool) -> Void) {
         guard vehicles.count != capacity else {
@@ -65,14 +65,17 @@ struct Parking {
             onError()
             return
         }
-        guard let vehicleRemoved = vehicles.remove(vehicle) else {
-            print("Error to remove Vehicle!")
+        guard let _ = vehicles.remove(vehicle) else {
             onError()
             return
         }
-        print(vehicleRemoved)
-        print(vehicle == vehicleRemoved)
-        onSuccess(5)
+        let hasDiscountCard = vehicle.discountCard != nil
+        let fee = calculateFee(type: vehicle.type, parkedTime: vehicle.parkedTime, hasDiscountCard: hasDiscountCard)
+        
+        info.earnings += fee
+        info.numberOfVehiclesCheckout += 1
+        
+        onSuccess(fee)
     }
     
     func calculateFee(type: VehicleType, parkedTime: Int, hasDiscountCard: Bool) -> Int {
@@ -82,23 +85,24 @@ struct Parking {
             fee += (parkedTime - 120) % 15 == 0 ? 0 : 5
         }
         
-        if hasDiscountCard {
+        if hasDiscountCard == true {
             fee = Int((1.0 - 0.15) * Double(fee))
         }
         return fee
     }
+    
+    func printInfos() {
+        print("\(info.numberOfVehiclesCheckout) vehicles have checked out and have earnings of $\(info.earnings)")
+    }
+    
+    func listVehicles() {
+        print("Plates")
+        print("======")
+        for vehicle in vehicles {
+            print(vehicle.plate)
+        }
+    }
 }
-
-
-//extension Date {
-//    var dayAfter: Date {
-//        return Calendar.current.date(byAdding: .day, value: 1, to: self)!
-//    }
-//
-//    var dayBefore: Date {
-//        return Calendar.current.date(byAdding: .day, value: -1, to: self)!
-//    }
-//}
 
 var alkeParking = Parking()
 print(alkeParking.calculateFee(type: .car, parkedTime: 198, hasDiscountCard: false))
@@ -120,20 +124,28 @@ for car in cars {
     }
 }
 
-
-alkeParking.checkOutVehicle(plate: "CC333CC") { price in
-    print(price)
+alkeParking.checkOutVehicle(plate: "CC333CC") { fee in
+    print("Your fee is $\(fee). Come back soon")
 } onError: {
-    print("Deu ruim")
+    print("Sorry, the check-out failed")
+}
+alkeParking.checkOutVehicle(plate: "DD444DD") { fee in
+    print("Your fee is $\(fee). Come back soon")
+} onError: {
+    print("Sorry, the check-out failed")
 }
 
+alkeParking.printInfos()
+alkeParking.listVehicles()
 
-//alkeParking.checkInVehicle(car, onFinish: inserir)
+alkeParking.calculateFee(type: .car, parkedTime: 136, hasDiscountCard: true)
+
+//extension Date {
+//    var dayAfter: Date {
+//        return Calendar.current.date(byAdding: .day, value: 1, to: self)!
+//    }
 //
-//alkeParking.checkInVehicle(moto, onFinish: inserir)
-//alkeParking.checkInVehicle(miniBus, onFinish: inserir)
-//alkeParking.checkInVehicle(bus, onFinish: inserir)
-//alkeParking.checkInVehicle(car2, onFinish: inserir)
-
-
-//alkeParking.vehicles.remove(moto)
+//    var dayBefore: Date {
+//        return Calendar.current.date(byAdding: .day, value: -1, to: self)!
+//    }
+//}
